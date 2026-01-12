@@ -9,124 +9,98 @@
             --oxagon-green: #2d5a27;
             --oxagon-alert: #b22222;
             --text-light: #ffffff;
-            --bg-dark: #0f0f0f;
+            --bg-dark: #0a0a0a;
             --accent-yellow: #f1c40f;
-            --card-gap: 15px;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-light);
             margin: 0;
-            padding: 15px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        h1 { 
-            margin: 10px 0 5px 0; 
-            font-size: 1.5rem; 
-            letter-spacing: 2px;
-            text-align: center;
-        }
-
-        .timestamp { 
-            margin-bottom: 20px; 
-            color: #888; 
-            font-size: 0.8rem; 
-            text-align: center;
-            text-transform: uppercase;
-        }
+        h1 { margin: 10px 0 2px 0; font-size: 1.3rem; letter-spacing: 1px; }
+        .timestamp { margin-bottom: 15px; color: #777; font-size: 0.75rem; font-weight: bold; }
 
         #route-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: var(--card-gap);
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 12px;
             width: 100%;
             max-width: 1200px;
         }
 
-        /* MOBILE OPTIMIZATIONS */
         @media (max-width: 600px) {
-            #route-container {
-                grid-template-columns: 1fr; /* Single column on mobile */
-            }
-            
-            .time-data {
-                flex-direction: column; /* Stack time and countdown */
-                align-items: flex-start !important;
-                gap: 5px;
-            }
-
-            .departure-time {
-                font-size: 1.8rem !important; /* Larger text for mobile eyes */
-            }
-
-            .countdown {
-                width: 100%;
-                text-align: center;
-            }
+            #route-container { grid-template-columns: 1fr; }
+            .departure-time { font-size: 1.3rem !important; }
+            .countdown { font-size: 0.85rem !important; padding: 4px 8px !important; }
         }
 
         .route-card {
             background-color: var(--oxagon-green);
-            padding: 20px;
-            border-radius: 16px;
+            padding: 14px 18px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
             border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
         }
 
         .route-card.imminent {
             background-color: var(--oxagon-alert);
-            border: 2px solid var(--accent-yellow);
+            border: 1px solid var(--accent-yellow);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(241, 196, 15, 0); }
+            70% { box-shadow: 0 0 0 8px rgba(241, 196, 15, 0); }
             100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); }
         }
 
         .route-name {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 800;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             border-bottom: 1px solid rgba(255,255,255,0.15);
-            padding-bottom: 8px;
-            color: rgba(255,255,255,0.9);
+            padding-bottom: 6px;
+            text-transform: uppercase;
         }
 
         .trip-row {
-            background: rgba(0,0,0,0.15);
-            margin-bottom: 10px;
-            padding: 12px;
-            border-radius: 10px;
+            background: rgba(0,0,0,0.12);
+            margin-bottom: 6px;
+            padding: 8px 12px;
+            border-radius: 8px;
         }
 
+        .trip-row:last-child { margin-bottom: 0; }
+
         .direction-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             font-weight: 600;
-            margin-bottom: 6px;
+            margin-bottom: 2px;
             display: block;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.6);
         }
 
         .time-data {
             display: flex;
+            flex-direction: row; /* Force horizontal on all devices */
             justify-content: space-between;
             align-items: center;
         }
 
         .departure-time {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
             font-family: monospace;
         }
@@ -135,34 +109,37 @@
             font-size: 0.9rem;
             font-weight: 700;
             color: var(--accent-yellow);
-            background: rgba(0,0,0,0.4);
-            padding: 6px 12px;
-            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 10px;
+            border-radius: 6px;
+            white-space: nowrap; /* Prevent wrapping */
         }
 
-        .no-bus { color: #ff9f9f; font-size: 0.9rem; font-weight: 600; }
+        .no-bus { color: #ffbaba; font-size: 0.85rem; font-weight: bold; }
         
-        .boarding-msg {
-            color: var(--accent-yellow);
+        .boarding-tag {
+            position: absolute;
+            top: 10px;
+            right: 18px;
+            font-size: 0.6rem;
+            background: var(--accent-yellow);
+            color: black;
+            padding: 2px 6px;
+            border-radius: 4px;
             font-weight: 900;
-            font-size: 0.7rem;
-            text-align: center;
-            margin-top: 5px;
-            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
     <h1>OXAGON MOBILITY</h1>
-    <div class="timestamp" id="current-time">Loading...</div>
+    <div class="timestamp" id="current-time">Riyadh Time</div>
 
     <div id="route-container"></div>
 
     <script>
-        // Full Dataset
         const scheduleData = [
-            { id: 1, name: "The HIVE ↔ OXAGON Community", 
+            { id: 1, name: "HIVE ↔ OXAGON Community", 
               days: {
                 weekday: [
                     {to: "OXAGON Community", deps: ["06:15", "06:45", "07:30", "08:00", "08:30", "09:30", "10:00", "10:45", "12:00", "13:45", "14:30", "16:15", "17:00", "18:15", "19:15", "20:00", "21:15"]},
@@ -242,7 +219,7 @@
             const isWeekend = (day === 5 || day === 6);
             const dayKey = isWeekend ? "weekend" : "weekday";
 
-            document.getElementById('current-time').innerText = `Riyadh: ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})} | ${now.toLocaleDateString('en-US', {weekday: 'short'})}`;
+            document.getElementById('current-time').innerText = `${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})} • ${now.toLocaleDateString('en-US', {weekday: 'short'})}`;
 
             const container = document.getElementById('route-container');
             container.innerHTML = '';
@@ -272,20 +249,20 @@
                         <div class="time-data">
                             ${next 
                                 ? `<span class="departure-time">${next.t}</span>
-                                   <span class="countdown">${formatCountdown(next.diff)}</span>`
-                                : `<span class="no-bus">Service Finished</span>`
+                                   <span class="countdown">in ${formatCountdown(next.diff)}</span>`
+                                : `<span class="no-bus">Finished</span>`
                             }
                         </div>
                     </div>
                 `;
 
                 card.innerHTML = `
+                    ${isImminent ? '<div class="boarding-tag">BOARDING</div>' : ''}
                     <div class="route-name">${route.name}</div>
                     ${renderRow(schedule[0], nextA)}
                     ${renderRow(schedule[1], nextB)}
-                    ${isImminent ? '<div class="boarding-msg">🚨 DEPARTING SOON 🚨</div>' : ''}
                 `;
-                container.appendChild(card);
+                container.appendChild(container.appendChild(card));
             });
         }
 
