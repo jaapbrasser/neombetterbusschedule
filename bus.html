@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OXAGON Live Bus Schedule</title>
+    <style>
+        :root {
+            --oxagon-green: #2d5a27;
+            --text-light: #ffffff;
+            --bg-dark: #121212;
+            --accent-yellow: #f1c40f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 { margin-bottom: 5px; }
+        .timestamp { margin-bottom: 25px; color: #aaa; font-size: 0.9rem; letter-spacing: 1px; }
+
+        #route-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .route-card {
+            background-color: var(--oxagon-green);
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .route-card:hover { transform: translateY(-3px); }
+
+        .route-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .trip-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .trip-row:last-child { margin-bottom: 0; }
+
+        .direction-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .time-data {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .departure-time {
+            font-size: 1.4rem;
+            font-weight: 800;
+            font-family: 'Courier New', monospace;
+        }
+
+        .countdown {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-yellow);
+            background: rgba(0,0,0,0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .no-bus { color: #ff9f9f; font-style: italic; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <h1>OXAGON MOBILITY</h1>
+    <div class="timestamp" id="current-time">Initializing Riyadh Clock...</div>
+
+    <div id="route-container"></div>
+
+    <script>
+        // Data derived from OXAGON Communities Bus Schedule V42
+        const scheduleData = {
+            "routes": [
+                {
+                    "name": "The HIVE – OXAGON Community",
+                    "days": {
+                        "weekday": [
+                            {"from": "The HIVE", "to": "OXAGON Community", "deps": ["06:15", "06:45", "07:30", "08:00", "08:30", "09:30", "10:00", "10:45", "12:00", "13:45", "14:30", "16:15", "17:00", "18:15", "19:15", "20:00", "21:15"]},
+                            {"from": "OXAGON Community", "to": "The HIVE", "deps": ["06:30", "07:00", "07:45", "08:30", "09:00", "09:45", "10:30", "11:00", "12:45", "13:30", "14:45", "15:15", "17:15", "17:45", "19:00", "20:00", "21:00", "22:00", "23:00"]}
+                        ],
+                        "weekend": [
+                            {"from": "The HIVE", "to": "OXAGON Community", "deps": ["06:15", "07:00", "07:30", "08:15", "09:15", "09:45", "11:00", "12:00", "14:30", "17:30", "18:15", "20:45", "21:15", "22:30"]},
+                            {"from": "OXAGON Community", "to": "The HIVE", "deps": ["07:00", "08:00", "08:30", "09:00", "09:45", "11:00", "12:30", "13:30", "15:15", "17:15", "19:30", "20:30", "21:30", "22:30"]}
+                        ]
+                    }
+                },
+                {
+                    "name": "The HIVE – NEOM Community 1",
+                    "days": {
+                        "weekday": [
+                            {"from": "The HIVE", "to": "NC 1", "deps": ["07:30", "11:00", "16:15"]},
+                            {"from": "NC 1", "to": "The HIVE", "deps": ["06:00", "09:15", "13:00", "17:30"]}
+                        ],
+                        "weekend": [
+                            {"from": "The HIVE", "to": "NC 1", "deps": ["07:30", "10:45", "15:30", "18:45"]},
+                            {"from": "NC 1", "to": "The HIVE", "deps": ["09:15", "14:00", "17:00", "20:30"]}
+                        ]
+                    }
+                },
+                {
+                    "name": "The HIVE – NEOM Hospital",
+                    "days": {
+                        "all": [
+                            {"from": "The HIVE", "to": "Hospital", "deps": ["07:30", "11:30", "15:30", "19:30"]},
+                            {"from": "Hospital", "to": "The HIVE", "deps": ["09:30", "13:30", "18:00", "21:30"]}
+                        ]
+                    }
+                },
+                {
+                    "name": "OXAGON – Port Office / T2",
+                    "days": {
+                        "weekday": [
+                            {"from": "OXAGON", "to": "Port Office 5", "deps": ["07:25", "08:35", "10:00", "11:10", "13:15", "14:50", "16:00", "17:10"]},
+                            {"from": "Port Office 5", "to": "OXAGON", "deps": ["08:25", "09:35", "10:55", "12:05", "14:25", "15:45", "16:55", "18:05"]}
+                        ]
+                    }
+                }
+            ]
+        };
+
+        function getRiyadhTime() {
+            const now = new Date();
+            const riyadhStr = now.toLocaleString("en-US", {timeZone: "Asia/Riyadh"});
+            return new Date(riyadhStr);
+        }
+
+        function getSecondsUntil(timeStr, now) {
+            const [h, m] = timeStr.split(':').map(Number);
+            const target = new Date(now);
+            target.setHours(h, m, 0, 0);
+            return (target - now) / 1000;
+        }
+
+        function formatCountdown(seconds) {
+            if (seconds < 0) return null;
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = Math.floor(seconds % 60);
+            return `${h > 0 ? h + 'h ' : ''}${m}m ${s}s`;
+        }
+
+        function updateUI() {
+            const now = getRiyadhTime();
+            const day = now.getDay(); // 0=Sun, 5=Fri, 6=Sat
+            const isWeekend = (day === 5 || day === 6);
+            const dayKey = isWeekend ? "weekend" : "weekday";
+
+            document.getElementById('current-time').innerText = `LIVE RIYADH TIME: ${now.toLocaleTimeString()} | ${now.toLocaleDateString('en-US', {weekday: 'long'})}`;
+
+            let results = [];
+
+            scheduleData.routes.forEach(route => {
+                const schedule = route.days.all || route.days[dayKey];
+                if (!schedule) return;
+
+                const outbound = schedule[0];
+                const inbound = schedule[1];
+
+                const findNext = (trip) => {
+                    for (let timeStr of trip.deps) {
+                        const diff = getSecondsUntil(timeStr, now);
+                        if (diff > 0) return { timeStr, diff };
+                    }
+                    return null;
+                };
+
+                const nextOut = findNext(outbound);
+                const nextIn = findNext(inbound);
+
+                const minDiff = Math.min(
+                    nextOut ? nextOut.diff : Infinity,
+                    nextIn ? nextIn.diff : Infinity
+                );
+
+                results.push({
+                    name: route.name,
+                    out: { label: outbound.to, data: nextOut },
+                    in: { label: inbound.to, data: nextIn },
+                    sortKey: minDiff
+                });
+            });
+
+            // Sort by closest bus
+            results.sort((a, b) => a.sortKey - b.sortKey);
+
+            const container = document.getElementById('route-container');
+            container.innerHTML = '';
+
+            results.forEach(res => {
+                const card = document.createElement('div');
+                card.className = 'route-card';
+                
+                const renderTrip = (tripObj) => `
+                    <div class="trip-row">
+                        <div class="direction-label">To ${tripObj.label}</div>
+                        <div class="time-data">
+                            ${tripObj.data 
+                                ? `<span class="departure-time">${tripObj.data.timeStr}</span>
+                                   <span class="countdown">in ${formatCountdown(tripObj.data.diff)}</span>`
+                                : `<span class="no-bus">No more buses today</span>`
+                            }
+                        </div>
+                    </div>
+                `;
+
+                card.innerHTML = `
+                    <div class="route-name">${res.name}</div>
+                    ${renderTrip(res.out)}
+                    ${renderTrip(res.in)}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        setInterval(updateUI, 1000);
+        updateUI();
+    </script>
+</body>
+</html>
