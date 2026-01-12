@@ -2,194 +2,223 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OXAGON Live Bus Schedule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OXAGON Bus Tracker</title>
     <style>
         :root {
             --oxagon-green: #2d5a27;
-            --oxagon-alert: #b22222; /* Crimson for imminent departure */
+            --oxagon-alert: #b22222;
             --text-light: #ffffff;
-            --bg-dark: #121212;
+            --bg-dark: #0f0f0f;
             --accent-yellow: #f1c40f;
+            --card-gap: 15px;
         }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-light);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        h1 { margin-bottom: 5px; color: var(--text-light); }
-        .timestamp { margin-bottom: 25px; color: #aaa; font-size: 0.9rem; letter-spacing: 1px; }
+        h1 { 
+            margin: 10px 0 5px 0; 
+            font-size: 1.5rem; 
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .timestamp { 
+            margin-bottom: 20px; 
+            color: #888; 
+            font-size: 0.8rem; 
+            text-align: center;
+            text-transform: uppercase;
+        }
 
         #route-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--card-gap);
             width: 100%;
             max-width: 1200px;
         }
 
+        /* MOBILE OPTIMIZATIONS */
+        @media (max-width: 600px) {
+            #route-container {
+                grid-template-columns: 1fr; /* Single column on mobile */
+            }
+            
+            .time-data {
+                flex-direction: column; /* Stack time and countdown */
+                align-items: flex-start !important;
+                gap: 5px;
+            }
+
+            .departure-time {
+                font-size: 1.8rem !important; /* Larger text for mobile eyes */
+            }
+
+            .countdown {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
         .route-card {
             background-color: var(--oxagon-green);
-            padding: 22px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            padding: 20px;
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Alert state for departures < 5 mins */
         .route-card.imminent {
             background-color: var(--oxagon-alert);
-            border-color: var(--accent-yellow);
-            transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(178, 34, 34, 0.6);
+            border: 2px solid var(--accent-yellow);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(241, 196, 15, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); }
         }
 
         .route-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 18px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            padding-bottom: 8px;
+            color: rgba(255,255,255,0.9);
         }
 
         .trip-row {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
+            background: rgba(0,0,0,0.15);
+            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 10px;
         }
 
-        .trip-row:last-child { margin-bottom: 0; }
-
         .direction-label {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            opacity: 0.9;
-            margin-bottom: 4px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: block;
+            color: rgba(255,255,255,0.7);
         }
 
         .time-data {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
+            align-items: center;
         }
 
         .departure-time {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 800;
-            font-family: 'Courier New', monospace;
+            font-family: monospace;
         }
 
         .countdown {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: var(--accent-yellow);
-            background: rgba(0,0,0,0.3);
-            padding: 4px 10px;
-            border-radius: 6px;
+            background: rgba(0,0,0,0.4);
+            padding: 6px 12px;
+            border-radius: 8px;
         }
 
-        .no-bus { color: #ffbaba; font-style: italic; font-size: 0.9rem; opacity: 0.8; }
+        .no-bus { color: #ff9f9f; font-size: 0.9rem; font-weight: 600; }
         
-        .alert-text {
-            font-size: 0.75rem;
-            font-weight: bold;
+        .boarding-msg {
             color: var(--accent-yellow);
+            font-weight: 900;
+            font-size: 0.7rem;
+            text-align: center;
             margin-top: 5px;
-            text-align: right;
-            text-transform: uppercase;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
     <h1>OXAGON MOBILITY</h1>
-    <div class="timestamp" id="current-time">Initializing Riyadh Clock...</div>
+    <div class="timestamp" id="current-time">Loading...</div>
 
     <div id="route-container"></div>
 
     <script>
-        // Full Route Data extracted from JSON
+        // Full Dataset
         const scheduleData = [
-            {
-                "id": 1,
-                "name": "The HIVE – OXAGON Community",
-                "days": {
-                    "weekday": [
-                        {"to": "OXAGON Community", "deps": ["06:15", "06:45", "07:30", "08:00", "08:30", "09:30", "10:00", "10:45", "12:00", "13:45", "14:30", "16:15", "17:00", "18:15", "19:15", "20:00", "21:15"]},
-                        {"to": "The HIVE", "deps": ["06:30", "07:00", "07:45", "08:30", "09:00", "09:45", "10:30", "11:00", "12:45", "13:30", "14:45", "15:15", "17:15", "17:45", "19:00", "20:00", "21:00", "22:00", "23:00"]}
-                    ],
-                    "weekend": [
-                        {"to": "OXAGON Community", "deps": ["06:15", "07:00", "07:30", "08:15", "09:15", "09:45", "11:00", "12:00", "14:30", "17:30", "18:15", "20:45", "21:15", "22:30"]},
-                        {"to": "The HIVE", "deps": ["07:00", "08:00", "08:30", "09:00", "09:45", "11:00", "12:30", "13:30", "15:15", "17:15", "19:30", "20:30", "21:30", "22:30"]}
-                    ]
-                }
+            { id: 1, name: "The HIVE ↔ OXAGON Community", 
+              days: {
+                weekday: [
+                    {to: "OXAGON Community", deps: ["06:15", "06:45", "07:30", "08:00", "08:30", "09:30", "10:00", "10:45", "12:00", "13:45", "14:30", "16:15", "17:00", "18:15", "19:15", "20:00", "21:15"]},
+                    {to: "The HIVE", deps: ["06:30", "07:00", "07:45", "08:30", "09:00", "09:45", "10:30", "11:00", "12:45", "13:30", "14:45", "15:15", "17:15", "17:45", "19:00", "20:00", "21:00", "22:00", "23:00"]}
+                ],
+                weekend: [
+                    {to: "OXAGON Community", deps: ["06:15", "07:00", "07:30", "08:15", "09:15", "09:45", "11:00", "12:00", "14:30", "17:30", "18:15", "20:45", "21:15", "22:30"]},
+                    {to: "The HIVE", deps: ["07:00", "08:00", "08:30", "09:00", "09:45", "11:00", "12:30", "13:30", "15:15", "17:15", "19:30", "20:30", "21:30", "22:30"]}
+                ]
+              }
             },
-            {
-                "id": 2,
-                "name": "OXAGON Community – NEOM Community 1",
-                "days": {
-                    "weekday": [
-                        {"to": "NEOM Community 1", "deps": ["07:00", "10:30", "12:15", "15:15", "17:15"]},
-                        {"to": "OXAGON Community", "deps": ["07:00", "08:45", "15:15", "17:30"]}
-                    ],
-                    "weekend": [
-                        {"to": "NEOM Community 1", "deps": ["10:00", "14:30", "16:30", "21:30"]},
-                        {"to": "OXAGON Community", "deps": ["10:00", "14:30", "16:30", "21:30"]}
-                    ]
-                }
+            { id: 2, name: "OXAGON Community ↔ NC 1", 
+              days: {
+                weekday: [
+                    {to: "NEOM Community 1", deps: ["07:00", "10:30", "12:15", "15:15", "17:15"]},
+                    {to: "OXAGON Community", deps: ["07:00", "08:45", "15:15", "17:30"]}
+                ],
+                weekend: [
+                    {to: "NEOM Community 1", deps: ["10:00", "14:30", "16:30", "21:30"]},
+                    {to: "OXAGON Community", deps: ["10:00", "14:30", "16:30", "21:30"]}
+                ]
+              }
             },
-            {
-                "id": 3,
-                "name": "The HIVE – NEOM Community 1",
-                "days": {
-                    "weekday": [
-                        {"to": "NC 1", "deps": ["07:30", "11:00", "16:15"]},
-                        {"to": "The HIVE", "deps": ["06:00", "09:15", "13:00", "17:30"]}
-                    ],
-                    "weekend": [
-                        {"to": "NC 1", "deps": ["07:30", "10:45", "15:30", "18:45"]},
-                        {"to": "The HIVE", "deps": ["09:15", "14:00", "17:00", "20:30"]}
-                    ]
-                }
+            { id: 3, name: "The HIVE ↔ NC 1", 
+              days: {
+                weekday: [
+                    {to: "NC 1", deps: ["07:30", "11:00", "16:15"]},
+                    {to: "The HIVE", deps: ["06:00", "09:15", "13:00", "17:30"]}
+                ],
+                weekend: [
+                    {to: "NC 1", deps: ["07:30", "10:45", "15:30", "18:45"]},
+                    {to: "The HIVE", deps: ["09:15", "14:00", "17:00", "20:30"]}
+                ]
+              }
             },
-            {
-                "id": 4,
-                "name": "The HIVE – NEOM Hospital",
-                "days": {
-                    "all": [
-                        {"to": "Hospital", "deps": ["07:30", "11:30", "15:30", "19:30"]},
-                        {"to": "The HIVE", "deps": ["09:30", "13:30", "18:00", "21:30"]}
-                    ]
-                }
+            { id: 4, name: "The HIVE ↔ NEOM Hospital", 
+              days: {
+                all: [
+                    {to: "Hospital", deps: ["07:30", "11:30", "15:30", "19:30"]},
+                    {to: "The HIVE", deps: ["09:30", "13:30", "18:00", "21:30"]}
+                ]
+              }
             },
-            {
-                "id": 5,
-                "name": "OXAGON – Port Office / T2",
-                "days": {
-                    "weekday": [
-                        {"to": "Port Office 5", "deps": ["07:25", "08:35", "10:00", "11:10", "13:15", "14:50", "16:00", "17:10"]},
-                        {"to": "OXAGON", "deps": ["08:25", "09:35", "10:55", "12:05", "14:25", "15:45", "16:55", "18:05"]}
-                    ]
-                }
+            { id: 5, name: "OXAGON ↔ Port Office / T2", 
+              days: {
+                weekday: [
+                    {to: "Port Office 5", deps: ["07:25", "08:35", "10:00", "11:10", "13:15", "14:50", "16:00", "17:10"]},
+                    {to: "OXAGON", deps: ["08:25", "09:35", "10:55", "12:05", "14:25", "15:45", "16:55", "18:05"]}
+                ]
+              }
             }
         ];
 
         function getRiyadhTime() {
             const now = new Date();
-            const riyadhStr = now.toLocaleString("en-US", {timeZone: "Asia/Riyadh"});
-            return new Date(riyadhStr);
+            return new Date(now.toLocaleString("en-US", {timeZone: "Asia/Riyadh"}));
         }
 
         function getSecondsUntil(timeStr, now) {
@@ -199,42 +228,39 @@
             return (target - now) / 1000;
         }
 
-        function formatCountdown(seconds) {
-            if (seconds < 0) return null;
-            const h = Math.floor(seconds / 3600);
-            const m = Math.floor((seconds % 3600) / 60);
-            const s = Math.floor(seconds % 60);
+        function formatCountdown(sec) {
+            if (sec < 0) return null;
+            const h = Math.floor(sec / 3600);
+            const m = Math.floor((sec % 3600) / 60);
+            const s = Math.floor(sec % 60);
             return `${h > 0 ? h + 'h ' : ''}${m}m ${s}s`;
         }
 
         function updateUI() {
             const now = getRiyadhTime();
-            const day = now.getDay(); 
+            const day = now.getDay();
             const isWeekend = (day === 5 || day === 6);
             const dayKey = isWeekend ? "weekend" : "weekday";
 
-            document.getElementById('current-time').innerText = `RIYADH TIME: ${now.toLocaleTimeString()} | ${now.toLocaleDateString('en-US', {weekday: 'long'})}`;
+            document.getElementById('current-time').innerText = `Riyadh: ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})} | ${now.toLocaleDateString('en-US', {weekday: 'short'})}`;
 
             const container = document.getElementById('route-container');
             container.innerHTML = '';
 
-            // Render in fixed ID order (HIVE-OXAGON is ID 1)
             scheduleData.forEach(route => {
                 const schedule = route.days.all || route.days[dayKey];
                 if (!schedule) return;
 
                 const findNext = (trip) => {
-                    for (let timeStr of trip.deps) {
-                        const diff = getSecondsUntil(timeStr, now);
-                        if (diff > 0) return { timeStr, diff };
+                    for (let t of trip.deps) {
+                        const diff = getSecondsUntil(t, now);
+                        if (diff > 0) return { t, diff };
                     }
                     return null;
                 };
 
                 const nextA = findNext(schedule[0]);
                 const nextB = findNext(schedule[1]);
-
-                // Check if any bus is departing in < 5 minutes (300 seconds)
                 const isImminent = (nextA && nextA.diff < 300) || (nextB && nextB.diff < 300);
 
                 const card = document.createElement('div');
@@ -242,12 +268,12 @@
                 
                 const renderRow = (trip, next) => `
                     <div class="trip-row">
-                        <div class="direction-label">To ${trip.to}</div>
+                        <span class="direction-label">To ${trip.to}</span>
                         <div class="time-data">
                             ${next 
-                                ? `<span class="departure-time">${next.timeStr}</span>
+                                ? `<span class="departure-time">${next.t}</span>
                                    <span class="countdown">${formatCountdown(next.diff)}</span>`
-                                : `<span class="no-bus">No more today</span>`
+                                : `<span class="no-bus">Service Finished</span>`
                             }
                         </div>
                     </div>
@@ -257,9 +283,8 @@
                     <div class="route-name">${route.name}</div>
                     ${renderRow(schedule[0], nextA)}
                     ${renderRow(schedule[1], nextB)}
-                    ${isImminent ? '<div class="alert-text">⚠️ Boarding Soon</div>' : ''}
+                    ${isImminent ? '<div class="boarding-msg">🚨 DEPARTING SOON 🚨</div>' : ''}
                 `;
-                
                 container.appendChild(card);
             });
         }
