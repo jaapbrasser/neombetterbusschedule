@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -13,7 +14,10 @@
             --accent-yellow: #f1c40f;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -26,8 +30,18 @@
             align-items: center;
         }
 
-        h1 { margin: 10px 0 2px 0; font-size: 1.3rem; letter-spacing: 1px; }
-        .timestamp { margin-bottom: 15px; color: #777; font-size: 0.75rem; font-weight: bold; }
+        h1 {
+            margin: 10px 0 2px 0;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+        }
+
+        .timestamp {
+            margin-bottom: 15px;
+            color: #777;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
 
         #route-container {
             display: grid;
@@ -38,9 +52,18 @@
         }
 
         @media (max-width: 600px) {
-            #route-container { grid-template-columns: 1fr; }
-            .departure-time { font-size: 1.3rem !important; }
-            .countdown { font-size: 0.85rem !important; padding: 4px 8px !important; }
+            #route-container {
+                grid-template-columns: 1fr;
+            }
+
+            .departure-time {
+                font-size: 1.3rem !important;
+            }
+
+            .countdown {
+                font-size: 0.85rem !important;
+                padding: 4px 8px !important;
+            }
         }
 
         .route-card {
@@ -49,7 +72,7 @@
             border-radius: 12px;
             display: flex;
             flex-direction: column;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
         }
 
@@ -60,28 +83,38 @@
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4); }
-            70% { box-shadow: 0 0 0 8px rgba(241, 196, 15, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(241, 196, 15, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(241, 196, 15, 0);
+            }
         }
 
         .route-name {
             font-size: 0.9rem;
             font-weight: 800;
             margin-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             padding-bottom: 6px;
             text-transform: uppercase;
         }
 
         .trip-row {
-            background: rgba(0,0,0,0.12);
+            background: rgba(0, 0, 0, 0.12);
             margin-bottom: 6px;
             padding: 8px 12px;
             border-radius: 8px;
         }
 
-        .trip-row:last-child { margin-bottom: 0; }
+        .trip-row:last-child {
+            margin-bottom: 0;
+        }
 
         .direction-label {
             font-size: 0.7rem;
@@ -89,12 +122,13 @@
             font-weight: 600;
             margin-bottom: 2px;
             display: block;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .time-data {
             display: flex;
-            flex-direction: row; /* Force horizontal on all devices */
+            flex-direction: row;
+            /* Force horizontal on all devices */
             justify-content: space-between;
             align-items: center;
         }
@@ -109,14 +143,19 @@
             font-size: 0.9rem;
             font-weight: 700;
             color: var(--accent-yellow);
-            background: rgba(0,0,0,0.3);
+            background: rgba(0, 0, 0, 0.3);
             padding: 5px 10px;
             border-radius: 6px;
-            white-space: nowrap; /* Prevent wrapping */
+            white-space: nowrap;
+            /* Prevent wrapping */
         }
 
-        .no-bus { color: #ffbaba; font-size: 0.85rem; font-weight: bold; }
-        
+        .no-bus {
+            color: #ffbaba;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
         .boarding-tag {
             position: absolute;
             top: 10px;
@@ -128,8 +167,107 @@
             border-radius: 4px;
             font-weight: 900;
         }
+
+        .expand-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 6px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .expand-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .intermediate-stops {
+            display: none;
+        }
+
+        .full-schedule-toggle {
+            width: 100%;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 0;
+            margin-top: 2px;
+            transition: color 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+            height: 12px;
+        }
+
+        .full-schedule-toggle:hover {
+            color: var(--accent-yellow);
+        }
+
+        .full-schedule-container {
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .schedule-group {
+            margin-bottom: 6px;
+        }
+
+        .schedule-direction-header {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            margin-bottom: 2px;
+            font-weight: bold;
+            padding-left: 2px;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 2px;
+        }
+
+        .time-item {
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 2px;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .time-item.past {
+            color: rgba(255, 255, 255, 0.3);
+            text-decoration: line-through;
+        }
+
+        .time-item.next {
+            color: var(--oxagon-green);
+            background: rgba(255, 255, 255, 0.9);
+            font-weight: 900;
+            color: black;
+            border: 2px solid var(--oxagon-green);
+        }
+
+        .time-item.future {
+            color: white;
+        }
+
+        .time-item.last {
+            font-weight: 900;
+            text-decoration: underline;
+        }
     </style>
 </head>
+
 <body>
 
     <h1>OXAGON MOBILITY</h1>
@@ -138,68 +276,18 @@
     <div id="route-container"></div>
 
     <script>
-        const scheduleData = [
-            { id: 1, name: "HIVE ↔ OXAGON Community", 
-              days: {
-                weekday: [
-                    {to: "OXAGON Community", deps: ["06:15", "06:45", "07:30", "08:00", "08:30", "09:30", "10:00", "10:45", "12:00", "13:45", "14:30", "16:15", "17:00", "18:15", "19:15", "20:00", "21:15"]},
-                    {to: "The HIVE", deps: ["06:30", "07:00", "07:45", "08:30", "09:00", "09:45", "10:30", "11:00", "12:45", "13:30", "14:45", "15:15", "17:15", "17:45", "19:00", "20:00", "21:00", "22:00", "23:00"]}
-                ],
-                weekend: [
-                    {to: "OXAGON Community", deps: ["06:15", "07:00", "07:30", "08:15", "09:15", "09:45", "11:00", "12:00", "14:30", "17:30", "18:15", "20:45", "21:15", "22:30"]},
-                    {to: "The HIVE", deps: ["07:00", "08:00", "08:30", "09:00", "09:45", "11:00", "12:30", "13:30", "15:15", "17:15", "19:30", "20:30", "21:30", "22:30"]}
-                ]
-              }
-            },
-            { id: 2, name: "OXAGON Community ↔ NC 1", 
-              days: {
-                weekday: [
-                    {to: "NEOM Community 1", deps: ["07:00", "10:30", "12:15", "15:15", "17:15"]},
-                    {to: "OXAGON Community", deps: ["07:00", "08:45", "15:15", "17:30"]}
-                ],
-                weekend: [
-                    {to: "NEOM Community 1", deps: ["10:00", "14:30", "16:30", "21:30"]},
-                    {to: "OXAGON Community", deps: ["10:00", "14:30", "16:30", "21:30"]}
-                ]
-              }
-            },
-            { id: 3, name: "The HIVE ↔ NC 1", 
-              days: {
-                weekday: [
-                    {to: "NC 1", deps: ["07:30", "11:00", "16:15"]},
-                    {to: "The HIVE", deps: ["06:00", "09:15", "13:00", "17:30"]}
-                ],
-                weekend: [
-                    {to: "NC 1", deps: ["07:30", "10:45", "15:30", "18:45"]},
-                    {to: "The HIVE", deps: ["09:15", "14:00", "17:00", "20:30"]}
-                ]
-              }
-            },
-            { id: 4, name: "The HIVE ↔ NEOM Hospital", 
-              days: {
-                all: [
-                    {to: "Hospital", deps: ["07:30", "11:30", "15:30", "19:30"]},
-                    {to: "The HIVE", deps: ["09:30", "13:30", "18:00", "21:30"]}
-                ]
-              }
-            },
-            { id: 5, name: "OXAGON ↔ Port Office / T2", 
-              days: {
-                weekday: [
-                    {to: "Port Office 5", deps: ["07:25", "08:35", "10:00", "11:10", "13:15", "14:50", "16:00", "17:10"]},
-                    {to: "OXAGON", deps: ["08:25", "09:35", "10:55", "12:05", "14:25", "15:45", "16:55", "18:05"]}
-                ]
-              }
-            }
-        ];
+        let allRoutes = [];
+        let expandedRoutes = new Set();
+        let expandedSchedules = new Set();
 
         function getRiyadhTime() {
             const now = new Date();
-            return new Date(now.toLocaleString("en-US", {timeZone: "Asia/Riyadh"}));
+            return new Date(now.toLocaleString("en-US", { timeZone: "Asia/Riyadh" }));
         }
 
         function getSecondsUntil(timeStr, now) {
-            const [h, m] = timeStr.split(':').map(Number);
+            if (!timeStr) return -1;
+            const [h, m] = timeStr.trim().split(':').map(Number);
             const target = new Date(now);
             target.setHours(h, m, 0, 0);
             return (target - now) / 1000;
@@ -210,64 +298,230 @@
             const h = Math.floor(sec / 3600);
             const m = Math.floor((sec % 3600) / 60);
             const s = Math.floor(sec % 60);
+
+            if (sec >= 600) {
+                return `${h > 0 ? h + 'h ' : ''}${m}m`;
+            }
             return `${h > 0 ? h + 'h ' : ''}${m}m ${s}s`;
+        }
+
+        async function fetchSchedule() {
+            try {
+                const response = await fetch('busschedule.json');
+                const data = await response.json();
+
+                allRoutes = [];
+                if (data.pages) {
+                    data.pages.forEach(page => {
+                        if (page.routes) {
+                            allRoutes.push(...page.routes);
+                        }
+                    });
+                }
+
+                // Custom Reordering
+                const preferredOrder = [
+                    "The HIVE – OXAGON Community",
+                    "The HIVE – NEOM Community 1 (NC 1)",
+                    "The HIVE – NEOM Hospital",
+                    "OXAGON Community – NEOM Hospital",
+                    "OXAGON Community – NEOM Community 1 (NC 1)",
+                    "The HIVE – Duba Plaza (The Farm Shop)"
+                ];
+
+                allRoutes.sort((a, b) => {
+                    const idxA = preferredOrder.indexOf(a.name);
+                    const idxB = preferredOrder.indexOf(b.name);
+
+                    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                    if (idxA !== -1) return -1;
+                    if (idxB !== -1) return 1;
+                    return 0; // Keep original order for the rest
+                });
+
+                updateUI();
+            } catch (error) {
+                console.error('Error fetching schedule:', error);
+                document.getElementById('route-container').innerHTML = '<div style="color: #e74c3c; text-align: center; margin-top: 20px;">Unable to load schedule data.</div>';
+            }
         }
 
         function updateUI() {
             const now = getRiyadhTime();
-            const day = now.getDay();
-            const isWeekend = (day === 5 || day === 6);
-            const dayKey = isWeekend ? "weekend" : "weekday";
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const currentDayName = days[now.getDay()];
 
-            document.getElementById('current-time').innerText = `${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})} • ${now.toLocaleDateString('en-US', {weekday: 'short'})}`;
+            document.getElementById('current-time').innerText = `${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} • ${currentDayName}`;
 
             const container = document.getElementById('route-container');
             container.innerHTML = '';
 
-            scheduleData.forEach(route => {
-                const schedule = route.days.all || route.days[dayKey];
-                if (!schedule) return;
+            if (allRoutes.length === 0) {
+                return;
+            }
 
-                const findNext = (trip) => {
-                    for (let t of trip.deps) {
-                        const diff = getSecondsUntil(t, now);
-                        if (diff > 0) return { t, diff };
+            allRoutes.forEach(route => {
+                let activeGroup = null;
+
+                // Handle day_groups
+                if (route.day_groups) {
+                    activeGroup = route.day_groups.find(g => g.days.includes(currentDayName));
+                }
+
+                // Handle special dates (simple override if matches today)
+                if (route.dates) {
+                    // Create simplistic date check for YYYY-MM-DD
+                    const yyyy = now.getFullYear();
+                    const mm = String(now.getMonth() + 1).padStart(2, '0');
+                    const dd = String(now.getDate()).padStart(2, '0');
+                    const todayStr = `${yyyy}-${mm}-${dd}`;
+
+                    if (route.dates.includes(todayStr)) {
+                        // Special service usually has stops_and_times, handling strictly as generic render if possible
+                        // Or just bypass for now as per plan focus on main shuttle routes
+                        return;
                     }
-                    return null;
+                }
+
+                if (!activeGroup) return;
+
+                // Determine the items to iterate (trips or legs)
+                const items = activeGroup.trips || activeGroup.legs || [];
+                if (items.length === 0) return;
+
+                let hasImminent = false;
+
+                // Function to generate HTML for a single row
+                const getRowHtml = (item) => {
+                    const deps = item.departures || [];
+                    let nextMeta = null;
+
+                    for (let d of deps) {
+                        // Departure can be string "HH:MM" or object {time: "HH:MM", note: "..."}
+                        let tStr = typeof d === 'object' ? d.time : d;
+                        let note = typeof d === 'object' ? d.note : (item.note || '');
+
+                        const diff = getSecondsUntil(tStr, now);
+
+                        // We check for next bus today. 
+                        // diff > 0 means future.
+                        if (diff > 0) {
+                            nextMeta = { time: tStr, diff, note };
+                            break;
+                        }
+                    }
+
+                    if (nextMeta && nextMeta.diff < 300) {
+                        hasImminent = true;
+                    }
+
+                    return `
+                        <div class="trip-row">
+                            <span class="direction-label">To ${item.to}</span>
+                            <div class="time-data">
+                                ${nextMeta
+                            ? `<span class="departure-time">${nextMeta.time}</span>
+                                       <span class="countdown">in ${formatCountdown(nextMeta.diff)}</span>`
+                            : `<span class="no-bus">Finished</span>`
+                        }
+                            </div>
+                            ${nextMeta && nextMeta.note ? `<div style="font-size: 0.7rem; color: #aaa; margin-top: 2px;">${nextMeta.note}</div>` : ''}
+                        </div>
+                    `;
                 };
 
-                const nextA = findNext(schedule[0]);
-                const nextB = findNext(schedule[1]);
-                const isImminent = (nextA && nextA.diff < 300) || (nextB && nextB.diff < 300);
+                // Processing for collapsible rows
+                let rowsHtml = '';
+                // Unique ID based on route name for stable state tracking
+                const routeId = route.name.replace(/\s+/g, '-');
+                const isExpanded = expandedRoutes.has(routeId);
+                const isScheduleExpanded = expandedSchedules.has(routeId);
+
+                // Build Full Schedule HTML
+                let scheduleHtml = '';
+                if (isScheduleExpanded) {
+                    const groupsHtml = items.map(item => {
+                        const deps = item.departures || [];
+                        const times = deps.map(d => typeof d === 'object' ? d.time : d); // Keep original order, usually sorted
+
+                        let foundNext = false;
+                        const timeItemsHtml = times.map((t, idx) => {
+                            const diff = getSecondsUntil(t, now);
+                            let statusClass = 'future';
+
+                            if (diff < 0) {
+                                statusClass = 'past';
+                            } else if (!foundNext) {
+                                statusClass = 'next';
+                                foundNext = true;
+                            }
+
+                            if (idx === times.length - 1) {
+                                statusClass += ' last';
+                            }
+
+                            return `<div class="time-item ${statusClass}">${t}</div>`;
+                        }).join('');
+
+                        return `
+                            <div class="schedule-group">
+                                <div class="schedule-direction-header">To ${item.to}</div>
+                                <div class="time-grid">
+                                    ${timeItemsHtml}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    scheduleHtml = `
+                        <div class="full-schedule-container">
+                            ${groupsHtml}
+                        </div>
+                    `;
+                }
+
+                if (items.length > 2) {
+                    const firstRow = getRowHtml(items[0]);
+                    const lastRow = getRowHtml(items[items.length - 1]);
+
+                    const middleRows = items.slice(1, items.length - 1).map(getRowHtml).join('');
+
+                    // Unique ID based on route name for stable state tracking
+                    // const routeId = route.name.replace(/\s+/g, '-'); // This was moved up.
+                    // const isExpanded = expandedRoutes.has(routeId); // This was moved up.
+
+                    rowsHtml = `
+                        ${firstRow}
+                        <button class="expand-btn" onclick="expandedRoutes.has('${routeId}') ? expandedRoutes.delete('${routeId}') : expandedRoutes.add('${routeId}'); updateUI();">
+                            ${isExpanded ? 'Hide Intermediate Stops' : `Show ${items.length - 2} Intermediate Stops`}
+                        </button>
+                        <div id="toggle-${routeId}" class="intermediate-stops" style="display: ${isExpanded ? 'block' : 'none'}">
+                            ${middleRows}
+                        </div>
+                        ${lastRow}
+                    `;
+                } else {
+                    rowsHtml = items.map(getRowHtml).join('');
+                }
 
                 const card = document.createElement('div');
-                card.className = `route-card ${isImminent ? 'imminent' : ''}`;
-                
-                const renderRow = (trip, next) => `
-                    <div class="trip-row">
-                        <span class="direction-label">To ${trip.to}</span>
-                        <div class="time-data">
-                            ${next 
-                                ? `<span class="departure-time">${next.t}</span>
-                                   <span class="countdown">in ${formatCountdown(next.diff)}</span>`
-                                : `<span class="no-bus">Finished</span>`
-                            }
-                        </div>
-                    </div>
-                `;
-
+                card.className = `route-card ${hasImminent ? 'imminent' : ''}`;
                 card.innerHTML = `
-                    ${isImminent ? '<div class="boarding-tag">BOARDING</div>' : ''}
+                    ${hasImminent ? '<div class="boarding-tag">BOARDING</div>' : ''}
                     <div class="route-name">${route.name}</div>
-                    ${renderRow(schedule[0], nextA)}
-                    ${renderRow(schedule[1], nextB)}
+                    ${rowsHtml}
+                    <button class="full-schedule-toggle" onclick="expandedSchedules.has('${routeId}') ? expandedSchedules.delete('${routeId}') : expandedSchedules.add('${routeId}'); updateUI();">
+                        ${isScheduleExpanded ? '▲' : '▼'}
+                    </button>
+                    ${scheduleHtml}
                 `;
-                container.appendChild(container.appendChild(card));
+                container.appendChild(card);
             });
         }
 
+        fetchSchedule();
         setInterval(updateUI, 1000);
-        updateUI();
     </script>
 </body>
+
 </html>

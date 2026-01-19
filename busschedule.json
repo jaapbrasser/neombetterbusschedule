@@ -1,0 +1,396 @@
+{
+  "document": {
+    "title": "OXAGON Communities Bus Schedule",
+    "version": "V42",
+    "effective_date": "2026-01-01",
+    "contact": {
+      "email": "OXAGON.MOBILITYSERVICES@NEOM.COM",
+      "dispatcher_phone": "+966559230777"
+    },
+    "scope": "First 3 pages only"
+  },
+  "pages": [
+    {
+      "page": 1,
+      "section": "HIVE Community Services",
+      "routes": [
+        {
+          "name": "The HIVE – OXAGON Community",
+          "type": "shuttle",
+          "day_groups": [
+            {
+              "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+              "trips": [
+                {
+                  "from": "The HIVE",
+                  "to": "OXAGON Community",
+                  "departures": ["06:15", "06:45", "07:30", "08:00", "08:30", "09:30", "10:00", "10:45", "12:00", "13:45", "14:30", "16:15", "17:00", "18:15", "19:15", "20:00", "21:15"]
+                },
+                {
+                  "from": "OXAGON Community",
+                  "to": "The HIVE",
+                  "departures": ["06:30", "07:00", "07:45", "08:30", "09:00", "09:45", "10:30", "11:00", "12:45", "13:30", "14:45", "15:15", "17:15", "17:45", "19:00", "20:00", "21:00", "22:00", "23:00"]
+                }
+              ]
+            },
+            {
+              "days": ["Friday", "Saturday"],
+              "trips": [
+                {
+                  "from": "The HIVE",
+                  "to": "OXAGON Community",
+                  "departures": ["06:15", "07:00", "07:30", "08:15", "09:15", "09:45", "11:00", "12:00", "14:30", "17:30", "18:15", "20:45", "21:15", "22:30"]
+                },
+                {
+                  "from": "OXAGON Community",
+                  "to": "The HIVE",
+                  "departures": ["07:00", "08:00", "08:30", "09:00", "09:45", "11:00", "12:30", "13:30", "15:15", "17:15", "19:30", "20:30", "21:30", "22:30"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "The HIVE – NEOM Community 1 (NC 1)",
+          "type": "shuttle",
+          "day_groups": [
+            {
+              "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+              "trips": [
+                {
+                  "from": "The HIVE",
+                  "to": "NEOM Community 1",
+                  "departures": ["07:30", "11:00", "16:15"]
+                },
+                {
+                  "from": "NEOM Community 1",
+                  "to": "The HIVE",
+                  "departures": ["06:00", "09:15", "13:00", "17:30"]
+                }
+              ]
+            },
+            {
+              "days": ["Friday", "Saturday"],
+              "trips": [
+                {
+                  "from": "The HIVE",
+                  "to": "NEOM Community 1",
+                  "departures": ["07:30", "10:45", "15:30", "18:45"]
+                },
+                {
+                  "from": "NEOM Community 1",
+                  "to": "The HIVE",
+                  "departures": ["09:15", "14:00", "17:00", "20:30"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "The HIVE – NEOM Hospital",
+          "type": "shuttle",
+          "day_groups": [
+            {
+              "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+              "trips": [
+                {
+                  "from": "The HIVE",
+                  "to": "NEOM Hospital",
+                  "departures": ["07:30", "11:30", "15:30", "19:30"]
+                },
+                {
+                  "from": "NEOM Hospital",
+                  "to": "The HIVE",
+                  "departures": ["09:30", "13:30", "18:00", "21:30"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "The HIVE – Duba Corniche – Duba Shopping Area",
+          "type": "multi_leg",
+          "day_groups": [
+            {
+              "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+              "legs": [
+                {
+                  "from": "The HIVE",
+                  "to": "Duba Corniche - Stop #1 (Playground)",
+                  "departures": ["18:30", "20:30", "22:30"]
+                },
+                {
+                  "from": "Duba Corniche - Stop #1 (Playground)",
+                  "to": "Duba Corniche - Stop #2 (Fish Restaurant)",
+                  "departures": ["19:25", "21:25", "23:25"]
+                },
+                {
+                  "from": "Duba Corniche - Stop #2 (Fish Restaurant)",
+                  "to": "Shopping Area/Market",
+                  "departures": ["19:30", "21:30", "23:30"]
+                },
+                {
+                  "from": "Shopping Area/Market",
+                  "to": "The HIVE",
+                  "departures": ["19:40", "21:40", "23:40"]
+                }
+              ]
+            },
+            {
+              "days": ["Friday", "Saturday"],
+              "legs": [
+                {
+                  "from": "The HIVE",
+                  "to": "Duba Corniche - Stop #1 (Playground)",
+                  "departures": ["10:30", "12:30", "14:30", "16:30", "18:30", "20:30", "22:30"]
+                },
+                {
+                  "from": "Duba Corniche - Stop #1 (Playground)",
+                  "to": "Duba Corniche - Stop #2 (Fish Restaurant)",
+                  "departures": ["11:25", "13:25", "15:25", "17:25", "19:25", "21:25", "23:25"]
+                },
+                {
+                  "from": "Duba Corniche - Stop #2 (Fish Restaurant)",
+                  "to": "Shopping Area/Market",
+                  "departures": ["11:30", "13:30", "15:30", "17:30", "19:30", "21:30", "23:30"]
+                },
+                {
+                  "from": "Shopping Area/Market",
+                  "to": "The HIVE",
+                  "departures": ["11:40", "13:40", "15:40", "17:40", "19:40", "21:40", "23:40"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "The HIVE – Duba Plaza (The Farm Shop)",
+          "type": "shuttle",
+          "day_groups": [
+            {
+              "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+              "trips": [
+                {
+                  "from": "The HIVE",
+                  "to": "Duba Plaza (The Farm Shop)",
+                  "departures": [
+                    { "time": "10:30", "note": "SUN & WED ONLY" },
+                    { "time": "18:30" },
+                    { "time": "21:15" }
+                  ]
+                },
+                {
+                  "from": "Duba Plaza (The Farm Shop)",
+                  "to": "The HIVE",
+                  "departures": [
+                    { "time": "14:00", "note": "SUN & WED ONLY" },
+                    { "time": "20:30" },
+                    { "time": "23:00" }
+                  ]
+                }
+              ]
+            },
+            {
+              "days": ["Friday", "Saturday"],
+              "trips": [
+                {
+                  "from": "The HIVE",
+                  "to": "Duba Plaza (The Farm Shop)",
+                  "departures": [
+                    { "time": "10:30" },
+                    { "time": "13:00", "note": "SAT ONLY" },
+                    { "time": "15:30" },
+                    { "time": "18:00" }
+                  ]
+                },
+                {
+                  "from": "Duba Plaza (The Farm Shop)",
+                  "to": "The HIVE",
+                  "departures": [
+                    { "time": "12:00" },
+                    { "time": "14:30" },
+                    { "time": "17:00" },
+                    { "time": "19:30" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "page": 2,
+      "section": "OXAGON Community Services",
+      "routes": [
+        {
+          "name": "OXAGON Community – NEOM Hospital",
+          "type": "shuttle",
+          "day_groups": [
+            {
+              "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+              "trips": [
+                {
+                  "from": "OXAGON Community",
+                  "to": "NEOM Hospital",
+                  "departures": ["08:00", "12:00", "16:00", "20:00"]
+                },
+                {
+                  "from": "NEOM Hospital",
+                  "to": "OXAGON Community",
+                  "departures": ["10:00", "14:00", "18:30", "21:30"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "OXAGON Community – NEOM Community 1 (NC 1)",
+          "type": "shuttle",
+          "day_groups": [
+            {
+              "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+              "trips": [
+                {
+                  "from": "OXAGON Community",
+                  "to": "NEOM Community 1",
+                  "departures": ["07:00", "10:30", "12:15", "15:15", "17:15"]
+                },
+                {
+                  "from": "NEOM Community 1",
+                  "to": "OXAGON Community",
+                  "departures": ["07:00", "08:45", "15:15", "17:30"]
+                }
+              ]
+            },
+            {
+              "days": ["Friday", "Saturday"],
+              "trips": [
+                {
+                  "from": "OXAGON Community",
+                  "to": "NEOM Community 1",
+                  "departures": ["10:00", "14:30", "16:30", "21:30"]
+                },
+                {
+                  "from": "NEOM Community 1",
+                  "to": "OXAGON Community",
+                  "departures": ["10:00", "14:30", "16:30", "21:30"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "OXAGON Community – Duba Corniche – Duba Plaza",
+          "type": "multi_leg",
+          "day_groups": [
+            {
+              "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+              "legs": [
+                {
+                  "from": "OXAGON Community",
+                  "to": "Duba Corniche",
+                  "departures": ["10:00", "12:00", "14:00", "16:00", "19:00", "21:00", "23:00"]
+                },
+                {
+                  "from": "Duba Corniche - Stop #1 (Playground)",
+                  "to": "Duba Corniche - Stop #2 (Fish Restaurant)",
+                  "departures": ["10:40", "12:40", "14:40", "16:40", "19:40", "21:40", "23:40"]
+                },
+                {
+                  "from": "Duba Corniche - Stop #2 (Fish Restaurant)",
+                  "to": "Duba Shopping Area",
+                  "departures": ["10:45", "12:45", "14:45", "16:45", "19:45", "21:45", "23:45"]
+                },
+                {
+                  "from": "Duba Shopping Area",
+                  "to": "Duba Plaza (The Farm)",
+                  "departures": ["10:50", "12:50", "14:50", "16:50", "19:50", "21:50", "23:50"]
+                },
+                {
+                  "from": "Duba Plaza",
+                  "to": "OXAGON Community",
+                  "departures": ["11:00", "13:00", "15:00", "17:00", "20:00", "22:00", "00:00"]
+                }
+              ],
+              "note": "Schedule shown once in the PDF table; assumed same for all days."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "page": 3,
+      "section": "Port of NEOM & Supplementary Services",
+      "routes": [
+        {
+          "name": "OXAGON Community – Port Office 5 – T0 Workshop – T2 Offices (North Building)",
+          "type": "multi_leg",
+          "day_groups": [
+            {
+              "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+              "legs": [
+                {
+                  "from": "OXAGON",
+                  "to": "Port Office 5",
+                  "departures": ["07:25", "08:35", "10:00", "11:10", "13:15", "14:50", "16:00", "17:10"]
+                },
+                {
+                  "from": "Port Office 5",
+                  "to": "T0 Workshop",
+                  "departures": ["07:30", "08:40", "10:05", "11:15", "13:20", "14:55", "16:05", "17:15"]
+                },
+                {
+                  "from": "T0 Workshop",
+                  "to": "T2 Offices (North Building)",
+                  "departures": ["08:00", "09:10", "10:30", "11:40", "13:45", "15:20", "16:30", "17:40"]
+                },
+                {
+                  "from": "T2 Offices (North Building)",
+                  "to": "Port Office 5",
+                  "departures": ["08:10", "09:20", "10:40", "11:50", "14:10", "15:30", "16:40", "17:50"]
+                },
+                {
+                  "from": "Port Office 5",
+                  "to": "OXAGON",
+                  "departures": ["08:25", "09:35", "10:55", "12:05", "14:25", "15:45", "16:55", "18:05"]
+                }
+              ],
+              "note": "The table header includes Friday/Saturday, but only this schedule is listed; treated as Sunday–Thursday service."
+            }
+          ]
+        },
+        {
+          "name": "OXAGON Hive – Tabuk Park Mall (special Friday dates)",
+          "type": "special_service",
+          "dates": ["2026-01-09", "2026-01-23"],
+          "stops_and_times": [
+            { "stop": "OXAGON Hive", "time": "10:30", "note": "Depart to Tabuk Park Mall" },
+            { "stop": "Tabuk Park Mall", "time": "20:00", "note": "Depart/meet time (return service)" },
+            { "stop": "OXAGON Hive", "time": "23:30", "note": "Scheduled Drop Off Only" },
+            { "stop": "OXAGON Basecamp", "time": "00:00", "note": "Scheduled Drop Off Only" }
+          ]
+        },
+        {
+          "name": "OXAGON Basecamp – Tabuk Park Mall (special Friday dates)",
+          "type": "special_service",
+          "dates": ["2026-01-02", "2026-01-16", "2026-01-30"],
+          "stops_and_times": [
+            { "stop": "OXAGON Basecamp", "time": "10:30", "note": "Depart to Tabuk Park Mall" },
+            { "stop": "Tabuk Park Mall", "time": "20:00", "note": "Depart/meet time (return service)" },
+            { "stop": "OXAGON Basecamp", "time": "23:30", "note": "Scheduled Drop Off Only" },
+            { "stop": "OXAGON Hive", "time": "00:00", "note": "Scheduled Drop Off Only" }
+          ]
+        },
+        {
+          "name": "OXAGON Basecamp – Fahad Bin Sultan University",
+          "type": "special_service",
+          "services": [
+            { "from": "OXAGON Basecamp", "to": "Fahad Bin Sultan University", "time": "17:15", "day": "Thursday", "note": "Drop Off Only" },
+            { "from": "Fahad Bin Sultan University", "to": "OXAGON Hive", "time": "15:00", "day": "Saturday", "note": "Pick Up Only" }
+          ]
+        }
+      ]
+    }
+  ]
+}
