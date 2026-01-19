@@ -397,9 +397,22 @@
 
                 let hasImminent = false;
 
+                // Helper to check if a trip is valid for today based on notes
+                const currentDayShort = currentDayName.substring(0, 3).toUpperCase();
+                const isTripValidForToday = (d) => {
+                    if (typeof d !== 'object' || !d.note) return true;
+                    const note = d.note.toUpperCase();
+                    // Check if note contains any day names
+                    const daysToCheck = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+                    const hasDayRestriction = daysToCheck.some(day => note.includes(day));
+
+                    if (!hasDayRestriction) return true;
+                    return note.includes(currentDayShort);
+                };
+
                 // Function to generate HTML for a single row
                 const getRowHtml = (item) => {
-                    const deps = item.departures || [];
+                    const deps = (item.departures || []).filter(isTripValidForToday);
                     let nextMeta = null;
 
                     for (let d of deps) {
@@ -447,7 +460,7 @@
                 let scheduleHtml = '';
                 if (isScheduleExpanded) {
                     const groupsHtml = items.map(item => {
-                        const deps = item.departures || [];
+                        const deps = (item.departures || []).filter(isTripValidForToday);
                         const times = deps.map(d => typeof d === 'object' ? d.time : d); // Keep original order, usually sorted
 
                         let foundNext = false;
