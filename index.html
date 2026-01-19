@@ -266,16 +266,73 @@
             font-weight: 900;
             text-decoration: underline;
         }
+
+        .day-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 0.65rem;
+            margin-left: 10px;
+        }
+
+        .day-row {
+            display: flex;
+            gap: 4px;
+        }
+
+        .day-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 2px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.65rem;
+            transition: all 0.2s;
+        }
+
+        .day-btn:hover {
+            border-color: var(--accent-yellow);
+            color: white;
+        }
+
+        .day-btn.active {
+            background: var(--accent-yellow);
+            color: black;
+            border-color: var(--accent-yellow);
+            font-weight: bold;
+        }
+
+        .day-btn.is-today {
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-decoration-color: var(--oxagon-green);
+        }
     </style>
 </head>
 
 <body>
 
     <div style="display: flex; align-items: center; margin: 10px 0 15px 0;">
-        <img src="logo.png" alt="Bus" style="height: 50px; margin-right: 12px;">
-        <div style="display: flex; flex-direction: column; align-items: flex-start;">
-            <h1 style="margin: 0; line-height: 1.2;">Bus Schedule</h1>
-            <div class="timestamp" id="current-time" style="margin: 0;">Riyadh Time</div>
+        <div style="display: flex; align-items: center; cursor: pointer;" onclick="resetToToday()">
+            <img src="logo.png" alt="Bus" style="height: 50px; margin-right: 12px;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <h1 style="margin: 0; line-height: 1.2;">Bus Schedule</h1>
+                <div class="timestamp" id="current-time" style="margin: 0;">Riyadh Time</div>
+            </div>
+        </div>
+        <div id="header-info" class="day-selector">
+            <div class="day-row">
+                <button class="day-btn" onclick="selectDay('Sunday')">SUN</button>
+                <button class="day-btn" onclick="selectDay('Monday')">MON</button>
+                <button class="day-btn" onclick="selectDay('Tuesday')">TUE</button>
+                <button class="day-btn" onclick="selectDay('Wednesday')">WED</button>
+            </div>
+            <div class="day-row">
+                <button class="day-btn" onclick="selectDay('Thursday')">THU</button>
+                <button class="day-btn" onclick="selectDay('Friday')">FRI</button>
+                <button class="day-btn" onclick="selectDay('Saturday')">SAT</button>
+            </div>
         </div>
     </div>
 
@@ -285,10 +342,26 @@
         let allRoutes = [];
         let expandedRoutes = new Set();
         let expandedSchedules = new Set();
+        let selectedDay = null; // Will default to today
 
         function getRiyadhTime() {
             const now = new Date();
             return new Date(now.toLocaleString("en-US", { timeZone: "Asia/Riyadh" }));
+        }
+
+        // Init selectedDay
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        selectedDay = days[getRiyadhTime().getDay()];
+
+        function selectDay(dayName) {
+            selectedDay = dayName;
+            updateUI();
+        }
+
+        function resetToToday() {
+            const now = getRiyadhTime();
+            selectedDay = days[now.getDay()];
+            updateUI();
         }
 
         function getSecondsUntil(timeStr, now) {
@@ -355,9 +428,39 @@
         function updateUI() {
             const now = getRiyadhTime();
             const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            const currentDayName = days[now.getDay()];
+            const realTodayName = days[now.getDay()];
 
-            document.getElementById('current-time').innerText = `${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} • ${currentDayName}`;
+            // If no day selected yet, default to real today
+            if (!selectedDay) selectedDay = realTodayName;
+
+            const isLiveView = (selectedDay === realTodayName);
+
+            // Update Header Buttons
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                const btnDay = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+
+                // Highlight Selected Day (Yellow Background)
+                if (btnDay === selectedDay) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+
+                // Highlight Today (Bold/Underline) regardless of selection
+                if (btnDay === realTodayName) {
+                    btn.classList.add('is-today');
+                    btn.style.fontWeight = '900';
+                } else {
+                    btn.classList.remove('is-today');
+                    // Reset font weight ONLY if not active (active is also bold)
+                    if (!btn.classList.contains('active')) {
+                        btn.style.fontWeight = 'normal';
+                    }
+                }
+            });
+
+            // Always show REAL time and REAL day in header
+            document.getElementById('current-time').innerText = `${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} • ${realTodayName}`;
 
             const container = document.getElementById('route-container');
             container.innerHTML = '';
@@ -371,22 +474,7 @@
 
                 // Handle day_groups
                 if (route.day_groups) {
-                    activeGroup = route.day_groups.find(g => g.days.includes(currentDayName));
-                }
-
-                // Handle special dates (simple override if matches today)
-                if (route.dates) {
-                    // Create simplistic date check for YYYY-MM-DD
-                    const yyyy = now.getFullYear();
-                    const mm = String(now.getMonth() + 1).padStart(2, '0');
-                    const dd = String(now.getDate()).padStart(2, '0');
-                    const todayStr = `${yyyy}-${mm}-${dd}`;
-
-                    if (route.dates.includes(todayStr)) {
-                        // Special service usually has stops_and_times, handling strictly as generic render if possible
-                        // Or just bypass for now as per plan focus on main shuttle routes
-                        return;
-                    }
+                    activeGroup = route.day_groups.find(g => g.days.includes(selectedDay));
                 }
 
                 if (!activeGroup) return;
@@ -397,143 +485,145 @@
 
                 let hasImminent = false;
 
-                // Helper to check if a trip is valid for today based on notes
-                const currentDayShort = currentDayName.substring(0, 3).toUpperCase();
-                const isTripValidForToday = (d) => {
+                // Helper to check validity for SELECTED day
+                const currentDayShort = selectedDay.substring(0, 3).toUpperCase();
+                const isTripValidForDay = (d) => {
                     if (typeof d !== 'object' || !d.note) return true;
                     const note = d.note.toUpperCase();
-                    // Check if note contains any day names
                     const daysToCheck = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
                     const hasDayRestriction = daysToCheck.some(day => note.includes(day));
-
                     if (!hasDayRestriction) return true;
                     return note.includes(currentDayShort);
                 };
 
-                // Function to generate HTML for a single row
-                const getRowHtml = (item) => {
-                    const deps = (item.departures || []).filter(isTripValidForToday);
-                    let nextMeta = null;
+                // --- DATA PREP ---
+                // We need to build the "Full Schedule" content regardless, because in Day View that's ALL we show.
+                // Group by 'to'
+                const groupsHtml = items.map(item => {
+                    const deps = (item.departures || []).filter(isTripValidForDay);
+                    if (deps.length === 0) return '';
 
-                    for (let d of deps) {
-                        // Departure can be string "HH:MM" or object {time: "HH:MM", note: "..."}
-                        let tStr = typeof d === 'object' ? d.time : d;
-                        let note = typeof d === 'object' ? d.note : (item.note || '');
+                    const times = deps.map(d => typeof d === 'object' ? d.time : d);
 
-                        const diff = getSecondsUntil(tStr, now);
+                    let foundNext = false;
+                    const timeItemsHtml = times.map((t, idx) => {
+                        let statusClass = 'future';
 
-                        // We check for next bus today. 
-                        // diff > 0 means future.
-                        if (diff > 0) {
-                            nextMeta = { time: tStr, diff, note };
-                            break;
-                        }
-                    }
-
-                    if (nextMeta && nextMeta.diff < 300) {
-                        hasImminent = true;
-                    }
-
-                    return `
-                        <div class="trip-row">
-                            <span class="direction-label">To ${item.to}</span>
-                            <div class="time-data">
-                                ${nextMeta
-                            ? `<span class="departure-time">${nextMeta.time}</span>
-                                       <span class="countdown">in ${formatCountdown(nextMeta.diff)}</span>`
-                            : `<span class="no-bus">Finished</span>`
-                        }
-                            </div>
-                            ${nextMeta && nextMeta.note ? `<div style="font-size: 0.7rem; color: #aaa; margin-top: 2px;">${nextMeta.note}</div>` : ''}
-                        </div>
-                    `;
-                };
-
-                // Processing for collapsible rows
-                let rowsHtml = '';
-                // Unique ID based on route name for stable state tracking
-                const routeId = route.name.replace(/\s+/g, '-');
-                const isExpanded = expandedRoutes.has(routeId);
-                const isScheduleExpanded = expandedSchedules.has(routeId);
-
-                // Build Full Schedule HTML
-                let scheduleHtml = '';
-                if (isScheduleExpanded) {
-                    const groupsHtml = items.map(item => {
-                        const deps = (item.departures || []).filter(isTripValidForToday);
-                        const times = deps.map(d => typeof d === 'object' ? d.time : d); // Keep original order, usually sorted
-
-                        let foundNext = false;
-                        const timeItemsHtml = times.map((t, idx) => {
+                        // Color coding only relevant for Live View (Today)
+                        if (isLiveView) {
                             const diff = getSecondsUntil(t, now);
-                            let statusClass = 'future';
-
                             if (diff < 0) {
                                 statusClass = 'past';
                             } else if (!foundNext) {
                                 statusClass = 'next';
                                 foundNext = true;
+                                if (diff < 300) hasImminent = true;
                             }
+                        }
 
-                            if (idx === times.length - 1) {
-                                statusClass += ' last';
-                            }
+                        if (idx === times.length - 1) {
+                            statusClass += ' last';
+                        }
 
-                            return `<div class="time-item ${statusClass}">${t}</div>`;
-                        }).join('');
-
-                        return `
-                            <div class="schedule-group">
-                                <div class="schedule-direction-header">To ${item.to}</div>
-                                <div class="time-grid">
-                                    ${timeItemsHtml}
-                                </div>
-                            </div>
-                        `;
+                        return `<div class="time-item ${statusClass}">${t}</div>`;
                     }).join('');
 
-                    scheduleHtml = `
-                        <div class="full-schedule-container">
+                    return `
+                        <div class="schedule-group">
+                            <div class="schedule-direction-header">To ${item.to}</div>
+                            <div class="time-grid">
+                                ${timeItemsHtml}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                const card = document.createElement('div');
+                card.className = `route-card ${isLiveView && hasImminent ? 'imminent' : ''}`;
+
+                if (isLiveView) {
+                    // --- LIVE VIEW LAYOUT ---
+                    // Shows Next Bus rows, Expand Button, Toggle for Full Schedule
+
+                    const getRowHtml = (item) => {
+                        const deps = (item.departures || []).filter(isTripValidForDay);
+                        let nextMeta = null;
+                        for (let d of deps) {
+                            let tStr = typeof d === 'object' ? d.time : d;
+                            let note = typeof d === 'object' ? d.note : (item.note || '');
+                            const diff = getSecondsUntil(tStr, now);
+                            if (diff > 0) {
+                                try {
+                                    // small validation of time format 
+                                    if (tStr.split(':').length === 2) {
+                                        nextMeta = { time: tStr, diff, note };
+                                        break;
+                                    }
+                                } catch (e) { }
+                            }
+                        }
+
+                        return `
+                            <div class="trip-row">
+                                <span class="direction-label">To ${item.to}</span>
+                                <div class="time-data">
+                                    ${nextMeta
+                                ? `<span class="departure-time">${nextMeta.time}</span>
+                                           <span class="countdown">in ${formatCountdown(nextMeta.diff)}</span>`
+                                : `<span class="no-bus">Finished</span>`
+                            }
+                                </div>
+                                ${nextMeta && nextMeta.note ? `<div style="font-size: 0.7rem; color: #aaa; margin-top: 2px;">${nextMeta.note}</div>` : ''}
+                            </div>
+                        `;
+                    };
+
+                    let rowsHtml = '';
+                    // Re-use logic for expand/collapse of intermediate stops
+                    const routeId = route.name.replace(/\s+/g, '-');
+                    const isExpanded = expandedRoutes.has(routeId);
+                    const isScheduleExpanded = expandedSchedules.has(routeId);
+
+                    if (items.length > 2) {
+                        const firstRow = getRowHtml(items[0]);
+                        const lastRow = getRowHtml(items[items.length - 1]);
+                        const middleRows = items.slice(1, items.length - 1).map(getRowHtml).join('');
+                        rowsHtml = `
+                            ${firstRow}
+                            <button class="expand-btn" onclick="expandedRoutes.has('${routeId}') ? expandedRoutes.delete('${routeId}') : expandedRoutes.add('${routeId}'); updateUI();">
+                                ${isExpanded ? 'Hide Intermediate Stops' : `Show ${items.length - 2} Intermediate Stops`}
+                            </button>
+                            <div id="toggle-${routeId}" class="intermediate-stops" style="display: ${isExpanded ? 'block' : 'none'}">
+                                ${middleRows}
+                            </div>
+                            ${lastRow}
+                        `;
+                    } else {
+                        rowsHtml = items.map(getRowHtml).join('');
+                    }
+
+                    // Build Card Content
+                    card.innerHTML = `
+                        ${hasImminent ? '<div class="boarding-tag">BOARDING</div>' : ''}
+                        <div class="route-name">${route.name}</div>
+                        ${rowsHtml}
+                        <button class="full-schedule-toggle" onclick="expandedSchedules.has('${routeId}') ? expandedSchedules.delete('${routeId}') : expandedSchedules.add('${routeId}'); updateUI();">
+                            ${isScheduleExpanded ? '▲' : '▼'}
+                        </button>
+                        ${isScheduleExpanded ? `<div class="full-schedule-container">${groupsHtml}</div>` : ''}
+                    `;
+
+                } else {
+                    // --- DAY VIEW LAYOUT ---
+                    // Shows ONLY the Full Schedule groups
+                    card.innerHTML = `
+                        <div class="route-name">${route.name}</div>
+                        <div class="full-schedule-container" style="display: block; border-top: none; padding-top: 0;">
                             ${groupsHtml}
                         </div>
                     `;
                 }
 
-                if (items.length > 2) {
-                    const firstRow = getRowHtml(items[0]);
-                    const lastRow = getRowHtml(items[items.length - 1]);
-
-                    const middleRows = items.slice(1, items.length - 1).map(getRowHtml).join('');
-
-                    // Unique ID based on route name for stable state tracking
-                    // const routeId = route.name.replace(/\s+/g, '-'); // This was moved up.
-                    // const isExpanded = expandedRoutes.has(routeId); // This was moved up.
-
-                    rowsHtml = `
-                        ${firstRow}
-                        <button class="expand-btn" onclick="expandedRoutes.has('${routeId}') ? expandedRoutes.delete('${routeId}') : expandedRoutes.add('${routeId}'); updateUI();">
-                            ${isExpanded ? 'Hide Intermediate Stops' : `Show ${items.length - 2} Intermediate Stops`}
-                        </button>
-                        <div id="toggle-${routeId}" class="intermediate-stops" style="display: ${isExpanded ? 'block' : 'none'}">
-                            ${middleRows}
-                        </div>
-                        ${lastRow}
-                    `;
-                } else {
-                    rowsHtml = items.map(getRowHtml).join('');
-                }
-
-                const card = document.createElement('div');
-                card.className = `route-card ${hasImminent ? 'imminent' : ''}`;
-                card.innerHTML = `
-                    ${hasImminent ? '<div class="boarding-tag">BOARDING</div>' : ''}
-                    <div class="route-name">${route.name}</div>
-                    ${rowsHtml}
-                    <button class="full-schedule-toggle" onclick="expandedSchedules.has('${routeId}') ? expandedSchedules.delete('${routeId}') : expandedSchedules.add('${routeId}'); updateUI();">
-                        ${isScheduleExpanded ? '▲' : '▼'}
-                    </button>
-                    ${scheduleHtml}
-                `;
                 container.appendChild(card);
             });
         }
