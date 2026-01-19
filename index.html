@@ -271,9 +271,13 @@
 
 <body>
 
-    <h1><img src="logo.png" alt="Bus" style="height: 50px; vertical-align: middle; margin-right: 10px;">Bus Schedule
-    </h1>
-    <div class="timestamp" id="current-time">Riyadh Time</div>
+    <div style="display: flex; align-items: center; margin: 10px 0 15px 0;">
+        <img src="logo.png" alt="Bus" style="height: 50px; margin-right: 12px;">
+        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <h1 style="margin: 0; line-height: 1.2;">Bus Schedule</h1>
+            <div class="timestamp" id="current-time" style="margin: 0;">Riyadh Time</div>
+        </div>
+    </div>
 
     <div id="route-container"></div>
 
